@@ -1,0 +1,72 @@
+spring:
+  rabbitmq:
+    virtual-host: 6-stream-function-ultimate
+  cloud:
+    stream:
+      function.definition: queue1Sink;queue2Sink;failedSink;deadletterSink
+      bindings:
+        queue1Sink-in-0:
+          destination: demo-exchange
+          group: demo-queue1
+          consumer:
+            max-attempts: 1
+        queue2Sink-in-0:
+          destination: demo-exchange
+          group: demo-queue2
+          consumer:
+            max-attempts: 1
+        failedSink-in-0:
+          destination: failed-exchange
+          group: failed-queue
+        deadletterSink-in-0:
+          destination: deadletter-exchange
+          group: deadletter-queue
+        source-out-0:
+          destination: demo-exchange
+        failed-out-0:
+          destination: failed-exchange
+      rabbit:
+        bindings:
+          queue1Sink-in-0:
+            consumer:
+              ttl: 5000
+              maxLength: 5
+              overflowBehavior: reject-publish-dlx
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue1
+              autoBindDlq: true
+              deadLetterExchange: retry-exchange
+              deadLetterQueueName: retry-queue
+              dlq-ttl: 5000
+              republishToDlq: true
+              dlqDeadLetterExchange:
+          queue2Sink-in-0:
+            consumer:
+              ttl: 5000
+              maxLength: 5
+              overflowBehavior: reject-publish-dlx
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue2
+              autoBindDlq: true
+              deadLetterExchange: retry-exchange
+              deadLetterQueueName: retry-queue
+              dlq-ttl: 5000
+              republishToDlq: true
+              dlqDeadLetterExchange:
+          failedSink-in-0:
+            consumer:
+              exchangeType: topic
+              queueNameGroupOnly: true
+              requeueRejected: true
+          deadletterSink-in-0:
+            consumer:
+              exchangeType: topic
+              queueNameGroupOnly: true
+              requeueRejected: true
+          source-out-0:
+            producer:
+              exchangeType: topic
+              routingKeyExpression: headers['myRoutingKey']
+          failed-out-0:
+            producer:
+              exchangeType: topic

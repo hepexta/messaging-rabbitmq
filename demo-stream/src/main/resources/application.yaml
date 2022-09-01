@@ -1,0 +1,42 @@
+spring:
+  rabbitmq:
+    virtual-host: 3-stream
+  cloud:
+    stream:
+      bindings:
+        input-queue1:
+          destination: demo-exchange
+          group: demo-queue1
+        input-queue2:
+          destination: demo-exchange
+          group: demo-queue2
+        output:
+          destination: demo-exchange
+#        output-queue1:
+#          destination: demo-exchange
+#        output-queue2:
+#          destination: demo-exchange
+      rabbit:
+        bindings:
+          input-queue1:
+            consumer:
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue1
+          input-queue2:
+            consumer:
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue2
+          output:
+            exchangeType: topic
+            producer:
+              # SPEL expression to obtain routing key dynamically from message header
+              # Alternatively similar behaviour can be achieved by specifying output destination per routing key
+              routingKeyExpression: headers['myRoutingKey']
+#          output-queue1:
+#            exchangeType: topic
+#            producer:
+#              routingKey: routing-queue1
+#          output-queue2:
+#            exchangeType: topic
+#            producer:
+#              routingKey: routing-queue2

@@ -1,0 +1,30 @@
+spring:
+  rabbitmq:
+    virtual-host: 4-stream-function
+  cloud:
+    stream:
+      function:
+        definition: queue1Sink;queue2Sink
+      bindings:
+        queue1Sink-in-0:
+          destination: demo-exchange
+          group: demo-queue1
+        queue2Sink-in-0:
+          destination: demo-exchange
+          group: demo-queue2
+        source-out-0:
+          destination: demo-exchange
+      rabbit:
+        bindings:
+          queue1Sink-in-0:
+            consumer:
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue1
+          queue2Sink-in-0:
+            consumer:
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue2
+          source-out-0:
+            producer:
+              exchangeType: topic
+              routingKeyExpression: headers['myRoutingKey']

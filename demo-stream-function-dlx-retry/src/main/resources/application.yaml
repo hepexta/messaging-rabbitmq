@@ -1,0 +1,50 @@
+republish: false
+spring:
+  rabbitmq:
+    virtual-host: 5-stream-function-dlx-retry
+  cloud:
+    stream:
+      function.definition: queue1Sink;queue2Sink
+      bindings:
+        queue1Sink-in-0:
+          destination: demo-exchange
+          group: demo-queue1
+          consumer:
+            # disable in-process retry, default is 3
+            max-attempts: 1
+        queue2Sink-in-0:
+          destination: demo-exchange
+          group: demo-queue2
+          consumer:
+            # disable in-process retry, default is 3
+            max-attempts: 1
+        source-out-0:
+          destination: demo-exchange
+      rabbit:
+        bindings:
+          queue1Sink-in-0:
+            consumer:
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue1
+              # https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream-binder-rabbit.html#_retry_with_the_rabbitmq_binder
+              autoBindDlq: true
+              deadLetterExchange: retry-exchange
+              deadLetterQueueName: retry-queue
+              dlq-ttl: 5000
+              republishToDlq: ${republish}
+              dlqDeadLetterExchange:
+          queue2Sink-in-0:
+            consumer:
+              queueNameGroupOnly: true
+              bindingRoutingKey: routing-queue2
+              # https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream-binder-rabbit.html#_retry_with_the_rabbitmq_binder
+              autoBindDlq: true
+              deadLetterExchange: retry-exchange
+              deadLetterQueueName: retry-queue
+              dlq-ttl: 5000
+              republishToDlq: ${republish}
+              dlqDeadLetterExchange:
+          source-out-0:
+            producer:
+              exchangeType: topic
+              routingKeyExpression: headers['myRoutingKey']
