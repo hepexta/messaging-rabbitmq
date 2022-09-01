@@ -35,6 +35,9 @@
     },
     {
       "name": "6-stream-function-ultimate"
+    },
+    {
+      "name": "hometask"
     }
   ],
   "permissions": [
@@ -83,6 +86,13 @@
     {
       "user": "guest",
       "vhost": "6-stream-function-ultimate",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "guest",
+      "vhost": "hometask",
       "configure": ".*",
       "write": ".*",
       "read": ".*"
