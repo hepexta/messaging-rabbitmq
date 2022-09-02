@@ -14,12 +14,10 @@ public class MessagePublisher {
 
     @Value("${service.rabbitmq.exchange}")
     private String exchange;
-    @Value("${service.rabbitmq.routingQueue}")
-    private String routingQueue;
 
     private final AmqpTemplate template;
 
-    public void publish(Message<String> message) {
+    public void publish(String routingQueue, Message<String> message) {
         template.convertAndSend(exchange, routingQueue, message);
         log.info("Message sent: {}", message);
     }

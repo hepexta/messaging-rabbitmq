@@ -5,4 +5,5 @@ spring:
 service:
   rabbitmq:
     exchange: hometask
-    routingQueue: queue-receipt
+    orderRoutingQueue: queue-order
+    processedRoutingQueue: queue-receipt
