@@ -3,7 +3,7 @@
 First example with custom retry logic is based on [Spring AMQP](https://docs.spring.io/spring-amqp/reference/html/) project.
 
 ## Messaging Topology
-![image info](../images/custom retry.png)
+![image info](../images/custom_retry.png)
 
 `RunConfig.class` produces a receipt orders in a loop with 100 delay to **queue-order**
 
