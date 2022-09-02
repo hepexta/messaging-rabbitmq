@@ -45,13 +45,9 @@ public class OrderListener {
     }
 
     private UpdateStatus getRandomStatus() {
-        int i = getRandomNumber(1, 4);
-        UpdateStatus value = UpdateStatus.values()[i];
-        log.info("Status changes to: {}, {}", value, i);
+        UpdateStatus value = UpdateStatus.values()[random.nextInt(3)];
+        log.info("Status changes to: {}", value);
         return value;
     }
 
-    public int getRandomNumber(int min, int max) {
-        return random.nextInt(3);
-    }
 }
