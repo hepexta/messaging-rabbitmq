@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hepexta.rabbitmq.hometask.model.Receipt;
 import com.hepexta.rabbitmq.hometask.model.UpdateStatus;
 import com.hepexta.rabbitmq.hometask.publisher.MessagePublisher;
+import com.hepexta.rabbitmq.hometask.storage.CacheStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,8 @@ import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @Slf4j
@@ -24,11 +25,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class OrderListener {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String RETRY_COUNT_FIELD = "retryCount";
     private final Random random = new Random();
     private final MessagePublisher messagePublisher;
-
-    @Value("${service.rabbitmq.processedRoutingQueue}")
-    private String processedRoutingQueue;
+    private final CacheStorage cacheStorage;
+    @Value("${service.rabbitmq.retryCount:3}")
+    private Integer retryCount;
+    @Value("${service.rabbitmq.orderRoutingQueue}")
+    private String orderRoutingQueue;
 
     @SneakyThrows
     @RabbitListener(queues = "${service.rabbitmq.orderRoutingQueue}")
@@ -40,8 +44,18 @@ public class OrderListener {
     private void processMessage(Message<String> in) throws JsonProcessingException {
         Receipt receipt = objectMapper.readValue(in.getPayload(), Receipt.class);
         receipt.setStatus(getRandomStatus());
-        String payload = objectMapper.writeValueAsString(receipt);
-        messagePublisher.publish(processedRoutingQueue, new GenericMessage(payload, in.getHeaders()));
+        if (UpdateStatus.UPDATED.equals(receipt.getStatus())) {
+            cacheStorage.store(receipt);
+        }
+        else {
+            Integer inRetryCount = Optional.ofNullable(in.getHeaders().get(RETRY_COUNT_FIELD, Integer.class)).orElse(0);
+            if (inRetryCount < retryCount) {
+                messagePublisher.publish(orderRoutingQueue, new GenericMessage<>(in.getPayload(), Map.of(RETRY_COUNT_FIELD, ++inRetryCount)));
+            }
+            else {
+                cacheStorage.storeFailed(receipt);
+            }
+        }
     }
 
     private UpdateStatus getRandomStatus() {
