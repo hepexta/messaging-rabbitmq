@@ -1,0 +1,8 @@
+spring:
+  rabbitmq:
+    virtual-host: hometask
+
+service:
+  rabbitmq:
+    exchange: hometask-dlx
+    orderRoutingQueue: queue-order-with-dlx

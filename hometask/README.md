@@ -2,6 +2,9 @@
 
 First example with custom retry logic is based on [Spring AMQP](https://docs.spring.io/spring-amqp/reference/html/) project.
 
+Failed Message Exchange is not configured as DLX for the source queues.
+Consumer is responsible to re-publish failed messages.
+
 ## Messaging Topology
 ![image info](../images/custom_retry.png)
 
