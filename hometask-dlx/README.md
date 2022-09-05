@@ -1,6 +1,6 @@
 # Retry by using DLX with TTL
 
-First example with custom retry logic is based on [Spring AMQP](https://docs.spring.io/spring-amqp/reference/html/) project.
+Second example with custom retry logic is based on [Spring AMQP](https://docs.spring.io/spring-amqp/reference/html/) project.
 
 Update previous implementation and change retry mechanism from inprocess to retry exchange/queue. 
 Retry queue should have ttl, after message expires it should be routed to the source queue.
