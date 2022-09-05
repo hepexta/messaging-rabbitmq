@@ -1,14 +1,15 @@
-package com.hepexta.rabbitmq.hometask.consumer;
+package com.hepexta.rabbitmq.hometaskcustomretrywithdlx.consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.publisher.MessagePublisher;
 import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt;
 import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.UpdateStatus;
-import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.publisher.MessagePublisher;
 import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.storage.CacheStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
@@ -44,7 +45,7 @@ public class OrderListener {
     private void processMessage(Message<String> in) throws JsonProcessingException {
         Receipt receipt = objectMapper.readValue(in.getPayload(), Receipt.class);
         receipt.setStatus(getRandomStatus());
-        if (UpdateStatus.UPDATED.equals(receipt.getStatus())) {
+        if (com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.UpdateStatus.UPDATED.equals(receipt.getStatus())) {
             cacheStorage.store(receipt);
         }
         else {
@@ -53,13 +54,13 @@ public class OrderListener {
                 messagePublisher.publish(orderRoutingQueue, new GenericMessage<>(in.getPayload(), Map.of(RETRY_COUNT_FIELD, ++inRetryCount)));
             }
             else {
-                cacheStorage.storeFailed(receipt);
+                throw new AmqpRejectAndDontRequeueException("nack and discard");
             }
         }
     }
 
-    private UpdateStatus getRandomStatus() {
-        UpdateStatus value = UpdateStatus.values()[random.nextInt(3)];
+    private com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.UpdateStatus getRandomStatus() {
+        com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.UpdateStatus value = UpdateStatus.values()[random.nextInt(3)];
         log.info("Status changes to: {}", value);
         return value;
     }

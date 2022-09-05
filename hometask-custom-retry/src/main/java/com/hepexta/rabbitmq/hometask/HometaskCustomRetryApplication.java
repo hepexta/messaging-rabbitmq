@@ -1,11 +1,12 @@
 package com.hepexta.rabbitmq.hometask;
 
+import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.HometaskCustomRetryWithDlxApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HometaskApplication {
+public class HometaskCustomRetryApplication {
     public static void main(String[] args) {
-        SpringApplication.run(HometaskApplication.class, args);
+        SpringApplication.run(HometaskCustomRetryWithDlxApplication.class, args);
     }
 }

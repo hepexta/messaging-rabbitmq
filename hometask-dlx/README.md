@@ -1,4 +1,4 @@
-# demo-stream-function-ultimate
+# Retry by using DLX with TTL
 
 First example with custom retry logic is based on [Spring AMQP](https://docs.spring.io/spring-amqp/reference/html/) project.
 

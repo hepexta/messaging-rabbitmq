@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hometask-custom-retry</artifactId>
+    <artifactId>hometask-custom-retry-with-dlx</artifactId>
 
-    <name>hometask-custom-retry</name>
+    <name>hometask-custom-retry-with-dlx</name>
 
     <dependencies>
         <dependency>

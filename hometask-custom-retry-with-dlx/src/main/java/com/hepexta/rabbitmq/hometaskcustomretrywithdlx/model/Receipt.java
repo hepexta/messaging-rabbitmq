@@ -1,6 +1,5 @@
-package com.hepexta.rabbitmq.hometask.model;
+package com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model;
 
-import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.UpdateStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.hepexta.rabbitmq.hometask.storage;
+package com.hepexta.rabbitmq.hometaskcustomretrywithdlx.storage;
 
 import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +11,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Slf4j
 public class CacheStorage {
 
-    private final Set<Receipt> storage = new CopyOnWriteArraySet<>();
-    private final Set<Receipt> failStorage = new CopyOnWriteArraySet<>();
+    private final Set<com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt> storage = new CopyOnWriteArraySet<>();
+    private final Set<com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt> failStorage = new CopyOnWriteArraySet<>();
 
-    public void store(Receipt receipt){
+    public void store(com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt receipt){
         storage.add(receipt);
         log.info("Storage Space: {}", storage.size());
     }

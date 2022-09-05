@@ -34,8 +34,9 @@
     <module>demo-stream-function</module>
 	<module>demo-stream-function-dlx-retry</module>
 	<module>demo-stream-function-ultimate</module>
-    <module>hometask</module>
+    <module>hometask-custom-retry</module>
     <module>hometask-dlx</module>
+    <module>hometask-custom-retry-with-dlx</module>
   </modules>
 
 </project>

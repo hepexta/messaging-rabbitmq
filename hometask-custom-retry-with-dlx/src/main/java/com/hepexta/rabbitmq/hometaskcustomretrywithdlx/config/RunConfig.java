@@ -1,8 +1,8 @@
-package com.hepexta.rabbitmq.hometask.config;
+package com.hepexta.rabbitmq.hometaskcustomretrywithdlx.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt;
 import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.publisher.MessagePublisher;
+import com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +38,7 @@ public class RunConfig {
         };
     }
 
-    private Receipt prepareReceipt() {
+    private com.hepexta.rabbitmq.hometaskcustomretrywithdlx.model.Receipt prepareReceipt() {
         return Receipt.builder()
                 .good("default")
                 .customer(UUID.randomUUID().toString())

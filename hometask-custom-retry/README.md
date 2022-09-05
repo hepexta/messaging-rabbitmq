@@ -1,4 +1,4 @@
-# demo-stream-function-ultimate
+# Custom Retry
 
 First example with custom retry logic is based on [Spring AMQP](https://docs.spring.io/spring-amqp/reference/html/) project.
 
