@@ -10,9 +10,9 @@ Retry queue should have ttl, after message expires it should be routed to the so
 ![image info](../images/custom_retry.png)
 
 ## RabbitMQ Configuration:
-![image info](../rmq_dlx_retry.PNG)
-![image info](../rmq_dlx_retry_queues_main.PNG)
-![image info](../rmq_dlx_retry_queues_delay.PNG)
+![image info](../images/rmq_dlx_retry.PNG)
+![image info](../images/rmq_dlx_retry_queues_main.PNG)
+![image info](../images/rmq_dlx_retry_queues_delay.PNG)
 
 
 `RunConfig.class` produces a receipt orders in a loop with 100 delay to **queue-order-with-dlx**
