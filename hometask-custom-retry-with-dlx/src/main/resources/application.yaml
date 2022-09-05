@@ -1,0 +1,9 @@
+spring:
+  rabbitmq:
+    virtual-host: hometask
+
+service:
+  rabbitmq:
+    exchange: hometask-custom-retry-with-dlx
+    orderRoutingQueue: custom-retry-with-dlx-queue-order
+    failedOrderQueue: dlx-custom-retry-with-dlx-queue-order

@@ -1,9 +1,0 @@
-spring:
-  rabbitmq:
-    virtual-host: hometask
-
-service:
-  rabbitmq:
-    exchange: hometask
-    orderRoutingQueue: queue-order
-    processedRoutingQueue: queue-receipt
